@@ -34,6 +34,10 @@ jobs:
         m () { make -j$(nproc) CC=musl-gcc LD=musl-gcc HOSTCC=musl-gcc HOSTLD=musl-ld "$@"; }
 
         m ${{matrix.defconfig}}
+
+        # CI image ships OpenSSL development files only for glibc
+        scripts/config --disable KEYTOC
+
         m scripts/
 
         test -n "$(musl-ldd scripts/imx/imx-usb-loader${{matrix.suffix}} 2>/dev/null | grep musl)"
